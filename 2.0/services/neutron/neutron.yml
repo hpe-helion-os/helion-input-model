@@ -1,0 +1,59 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+product:
+    version: 2
+
+services:
+-   name: neutron
+    mnemonic: NEU
+
+    components:
+        control_plane:
+            neutron-server:     
+               min: 1
+            neutron-ml2-plugin:
+               min: 1
+            neutron-l3-agent:
+               min: 0
+            neutron-dhcp-agent:
+               min: 1
+            neutron-metadata-agent:
+               min: 1
+            neutron-openvswitch-agent:
+               min: 0
+            neutron-vpn-agent:
+               min: 1
+            neutron-client:
+               min: 1
+
+        compute:
+            neutron-l3-agent:
+               min: 1
+            neutron-dhcp-agent:
+               min: 1
+            neutron-openvswitch-agent:
+               min: 0
+            neutron-lbaasv2-agent:
+               min: 0
+            neutron-lbaas-agent:
+               min: 0
+
+    commands:
+        configure: neutron-configure.yml
+        deploy: neutron-deploy.yml
+        start: neutron-start.yml
+        stop: neutron-stop.yml

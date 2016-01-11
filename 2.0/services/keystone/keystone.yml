@@ -1,0 +1,204 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+product:
+    version: 2
+
+services:
+-   name: keystone
+    mnemonic: KEY
+
+    components:
+        control_plane:
+            keystone-api: 
+               min: 1
+            keystone-client: 
+               min: 1
+
+    commands:
+        configure: keystone-configure.yml
+        deploy: keystone-deploy.yml
+        start: keystone-start.yml
+        stop: keystone-stop.yml
+
+
+
+service-components:
+-   name: keystone-api
+    mnemonic: KEY-API
+
+    advertises-to-services:
+    -   service-name: KEY-API
+
+    keystone-service-name: keystone
+    keystone-service-type: identity
+
+    config-set:
+    -   name: keystone.conf
+        file: /etc/keystone/keystone.conf
+        affected-service: keystone-api
+        ansible-vars:
+        -   name: keystone_admin_tenant
+            value: admin
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_admin_user
+            value: admin
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_admin_pwd
+            value: '%random-password%'
+            is-private: 'true'
+            properties:
+                max-length: 12
+                min-length: 8
+            target: group-tier
+
+        -   name: keystone_admin_token
+            value: '%random-password%'
+            is-private: 'true'
+            properties:
+                max-length: 12
+                min-length: 8
+            target: group-tier
+
+        -   name: keystone_admin_role
+            value: admin
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_KeystoneAdmin_role
+            value: KeystoneAdmin
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_KeystoneSeviceAdmin_role
+            value: KeystoneServiceAdmin
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_member_role
+            value: _member_
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_demo_tenant
+            value: demo
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_demo_user
+            value: demo
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_demo_pwd
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+            target: group-tier
+
+        -   name: keystone_service_tenant
+            value: services
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_default_domain
+            value: Default
+            is-private: 'false'
+            target: group-tier
+
+        -   name: keystone_cloudadmin_domain
+            value: cloud_admin
+            is-private: 'false'
+            target: group-tier
+
+    consumes-services:
+    -   service-name: FND-MDB
+        relationship-vars:
+        -   name: mysql_admin_user
+            value: keystone
+        -   name: mysql_admin_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+
+    -   service-name: FND-RMQ
+        relationship-vars:
+        -   name: rmq_service_user
+            value: guest
+        -   name: rmq_service_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+
+    endpoints:
+    -   port: '5000'
+        has-vip: true
+        vip-options:
+        - "balance leastconn"
+        - "mode http"
+        - "option httpchk GET /"
+        - "option redispatch"
+        - "option forwardfor"
+        roles:
+        - public
+    -   port: '5000'
+        has-vip: true
+        vip-options:
+        - "http-request set-header X-Vip-Name internal"
+        - "balance leastconn"
+        - "mode http"
+        - "option httpchk GET /"
+        - "option redispatch"
+        - "option forwardfor"
+        roles:
+        - internal
+    -   port: '35357'
+        has-vip: true
+        vip-options:
+        - "balance leastconn"
+        - "mode http"
+        - "option httpchk GET /"
+        - "option redispatch"
+        - "option forwardfor"
+        roles:
+        - admin
+
+    has-container:
+    -   service-name: FND-AP2
+        relationship-vars:
+        -   name: apache_port
+            value: '5000'
+
+    produces-log-files:
+    -   service-name: FND-LGP
+        relationship-vars:
+        -   name: log_files
+            value:
+            -   path: /var/log/keystone/keystone-json.log
+            target: group-tier
+
+    # Flags to keep compatibilty with 1.0 playbooks
+    publish-internal-as-public: true

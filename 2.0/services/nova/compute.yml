@@ -1,0 +1,51 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+product:
+    version: 2
+
+service-components:
+-   name: nova-compute
+    mnemonic: NOV-CMP
+
+    zone-type: nova_availability_zones
+
+    network-tags:
+    -   name: nova.compute.iscsi
+        deprecated: "Use the 'force-network-groups' value in the interface-model instead if you need to ensure a network is attached to specific server to avoid routing"
+        needs-value: false
+        needs-bridge: false
+
+    consumes-services:
+    -   service-name: FND-RMQ
+    -   service-name: KEY-API
+    -   service-name: NEU-SVR
+    -   service-name: GLA-API
+    -   service-name: CND-API
+        optional: true
+    -   service-name: NOV-VNC
+        optional: true
+    -   service-name: VSA-BLK
+        optional: true
+    -   service-name: CEP-MON
+        optional: true
+    -   service-name: CEP-OSD
+        optional: true
+
+    endpoints:
+    -   port: '5900:6100'
+        roles:
+        - vncdisplay

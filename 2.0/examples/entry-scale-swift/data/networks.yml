@@ -1,0 +1,55 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+  product:
+    version: 2
+
+  networks:
+    #
+    # This example uses the following networks
+    #
+    # Network       CIDR             VLAN
+    # -------       ----             ----
+    # External API  10.0.1.0/24      101 (tagged)
+    # SWIFT         10.1.1.0/24      102 (tagged)
+    # MANAGEMENT    10.241.17.0/24   100 (untagged)
+    #
+    # Modify these values to match your environment
+    #
+    - name: EXTERNAL-API-NET
+      vlanid: 101
+      tagged-vlan: true
+      cidr: 10.0.1.0/24
+      gateway-ip: 10.0.1.1
+      network-group: EXTERNAL-API
+      #start-address: 10.0.1.10
+      #end-address: 10.0.1.250
+
+    - name: SWIFT-NET
+      vlanid: 102
+      tagged-vlan: true
+      cidr: 10.1.1.0/24
+      gateway-ip: 10.1.1.1
+      network-group: SWIFT
+
+    - name: MANAGEMENT-NET
+      vlanid: 100
+      tagged-vlan: false
+      cidr: 10.241.17.0/24
+      gateway-ip: 10.241.17.1
+      network-group: MANAGEMENT
+      #start-address: 10.241.17.10
+      #end-address: 10.241.17.250

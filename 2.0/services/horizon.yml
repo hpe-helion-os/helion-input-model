@@ -1,0 +1,94 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+product:
+    version: 2
+
+services:
+-   name: horizon
+    mnemonic: HZN
+
+    components:
+        control_plane:
+            horizon: 
+               min: 1
+
+    commands:
+        configure: horizon-configure.yml
+        deploy: horizon-deploy.yml
+        start: horizon-start.yml
+        stop: horizon-stop.yml
+
+
+
+service-components:
+-   name: horizon
+    mnemonic: HZN-WEB
+
+    advertises-to-services:
+    -   service-name: KEY-API
+
+    config-set:
+    -   name: horizon_secret_key
+        affected-service: horizon
+        ansible-vars:
+        -   name: horizon_secret_key
+            value: '%random-password%'
+            properties:
+                min-length: 64
+                max-length: 64
+                # basic alphanumeric is what Horizon generates now
+                available-chars: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+            target: group-tier
+            is-private: 'true'
+
+    consumes-services:
+    -   service-name: KEY-API
+
+    -   service-name: FND-MDB
+        relationship-vars:
+        -   name: mysql_admin_user
+            value: horizon
+        -   name: mysql_admin_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+
+    -   service-name: FND-MEM
+
+    endpoints:
+    -   port: '80'
+        vip-tls-port: '443'
+        has-vip: true
+        vip-options:
+        - "option httpchk GET /"
+        - "stick on src"
+        - "stick-table type ip size 200k expire 30m"
+        - "mode http"
+        - "http-request set-header X-Forwarded-Protocol https if { ssl_fc }"
+        - "option redispatch"
+        - "option forwardfor"
+        roles:
+        - public
+        - internal
+
+    has-container:
+    -   service-name: FND-AP2
+        relationship-vars:
+        -   name: apache_port
+            value: '9000'

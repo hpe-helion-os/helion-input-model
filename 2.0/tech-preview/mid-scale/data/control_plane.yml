@@ -1,0 +1,173 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+---
+  product:
+    version: 2
+
+  control-planes:
+    - name: control-plane-1
+      control-plane-prefix: cp1
+      region-name: region1
+      failure-zones:
+        - AZ1
+        - AZ2
+        - AZ3
+      common-service-components:
+        - logging-producer
+        - monasca-agent
+        - freezer-agent
+        - stunnel
+        - lifecycle-manager-target
+      clusters:
+        - name: core
+          cluster-prefix: core
+          server-role: CORE-ROLE
+          member-count: 2
+          allocation-policy: strict
+          service-components:
+            - lifecycle-manager
+            - apache2
+            - keystone-api
+            - cinder-api
+            - cinder-scheduler
+            - cinder-volume
+            - cinder-backup
+            - cinder-client
+            - cmc-service
+            - keystone-client
+            - glance-api
+            - glance-registry
+            - glance-client
+            - horizon
+            - heat-api
+            - heat-api-cfn
+            - heat-api-cloudwatch
+            - heat-engine
+            - heat-client
+            - ip-cluster
+            - memcached
+            - openstack-client
+            - nova-api
+            - nova-scheduler
+            - nova-conductor
+            - nova-console-auth
+            - nova-novncproxy
+            - nova-client
+            - neutron-server
+            - neutron-ml2-plugin
+            - neutron-client
+            - ntp-server
+            - sherpa-api
+            - ops-console-web
+            - ops-console-monitor
+
+        - name: mtrmon
+          cluster-prefix: mtrmon
+          server-role: MTRMON-ROLE
+          member-count: 3
+          allocation-policy: strict
+          service-components:
+            - ntp-client
+            - ceilometer-api
+            - ceilometer-collector
+            - ceilometer-agent-central
+            - ceilometer-agent-notification
+            - ceilometer-expirer
+            - ceilometer-common
+            - ceilometer-client
+            - vertica
+            - influxdb
+            - kafka
+            - logging-server
+            # logging needs apache
+            - apache2
+            - storm
+            - monasca-api
+            - monasca-persister
+            - monasca-notifier
+            - monasca-threshold
+            - monasca-client
+            - zookeeper
+            - freezer-api
+
+        - name: dbmq
+          cluster-prefix: dbmq
+          server-role: DBMQ-ROLE
+          member-count: 3
+          allocation-policy: strict
+          service-components:
+            - ntp-client
+            - mysql
+            - rabbitmq
+
+        - name: swpac
+          cluster-prefix: swpac
+          server-role: SWPAC-ROLE
+          member-count: 3
+          allocation-policy: strict
+          service-components:
+            - ntp-client
+            - swift-proxy
+            - swift-account
+            - swift-container
+            - swift-ring-builder
+            - swift-client
+
+        - name: neut
+          cluster-prefix: neut
+          server-role: NEUTRON-ROLE
+          member-count: 2
+          allocation-policy: strict
+          service-components:
+            - ntp-client
+            - neutron-vpn-agent
+            - neutron-dhcp-agent
+            - neutron-metadata-agent
+            - neutron-openvswitch-agent
+
+      resources:
+        - name: compute
+          resource-prefix: comp
+          server-role: COMPUTE-ROLE
+          allocation-policy: strict
+          min-count: 0
+          service-components:
+            - ntp-client
+            - nova-compute-kvm
+            - nova-compute
+            - neutron-l3-agent
+            - neutron-metadata-agent
+            - neutron-openvswitch-agent
+            - neutron-lbaasv2-agent
+
+        - name: vsa
+          resource-prefix: vsa
+          server-role: VSA-ROLE
+          allocation-policy: strict
+          min-count: 3
+          service-components:
+            - ntp-client
+            - vsa
+
+        - name: swobj
+          resource-prefix: swobj
+          server-role: SWOBJ-ROLE
+          allocation-policy: strict
+          min-count: 3
+          service-components:
+            - ntp-client
+            - swift-object

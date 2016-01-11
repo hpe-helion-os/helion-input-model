@@ -1,0 +1,137 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+product:
+    version: 2
+
+service-components:
+-   name: mysql
+    mnemonic: FND-MDB
+
+    advertise-member-list-on:
+    - NETCLM
+
+    config-set:
+    -   name: mysql.cnf
+        file: /etc/mysql/my.cnf
+        affected-service: mysql
+        ansible-vars:
+        -   name: mysql_root_user
+            value: root
+            is-private: 'false'
+            target: group-tier
+
+        -   name: mysql_root_pwd
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+            target: group-tier
+
+        -   name: mysql_cluster_name
+            value: '%random-string%'
+            properties:
+                max-length: 8
+                min-length: 8
+            is-private: 'false'
+            target: group-tier
+
+        -   name: mysql_sst_user
+            value: sst_user
+            is-private: 'false'
+            target: group-tier
+
+        -   name: mysql_sst_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+            target: group-tier
+
+        -   name: mysql_clustercheck_user
+            value: clustercheckuser
+            is-private: 'false'
+            target: group-tier
+
+        -   name: mysql_clustercheck_pwd
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+            target: group-tier
+
+        -   name: mysql_clustercheck_port
+            value: '9500'
+            is-private: 'false'
+            target: group-tier
+
+        -   name: mysql_service_user
+            value: openstack
+            is-private: 'false'
+            target: group-tier
+
+        -   name: mysql_service_pwd
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+            target: group-tier
+
+    endpoints:
+    -   port: '3306'
+        has-vip: true
+        vip-options:
+         -  "option httpchk GET /"
+         -  "maxconn 10000"
+         -  "option redispatch"
+         -  "timeout client 0"
+         -  "timeout connect 5000"
+         -  "timeout server 0"
+        vip-check: "check port 9500 inter 12000 rise 3 fall 3"
+        vip-backup-mode: true
+        tls-initiator: true
+        roles:
+        - internal
+        - admin
+    -   port: '4567'
+        roles:
+        - mysql_gcomms
+    -   port: '4568'
+        roles:
+        - mysql_ist
+    -   port: '4444'
+        roles:
+        - mysql_sst
+    -   port: '9500'
+        roles:
+        - mysql_mysqlchk
+
+
+    produces-log-files:
+    -   service-name: FND-LGP
+        relationship-vars:
+        -   name: log_files
+            target: group-tier
+            value:
+            -   path: /var/log/mysql/mysql.log
+            -   path: /var/log/mysql/error.log
+
+     # Flags to keep compatibilty with 1.0 playbooks
+    publish-internal-as-public: true

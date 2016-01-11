@@ -1,0 +1,75 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+product:
+  version: 2
+
+service-components:
+- name: rabbitmq
+  mnemonic: FND-RMQ
+
+  advertise-member-list-on:
+    - NETCLM
+
+  config-set:
+    -   name: .erlang.cookie
+        file: .erlang.cookie
+        affected-service: rabbitmq
+        ansible-vars:
+        -   name: erlang_cookie
+            value: '%random-string%'
+            properties:
+                max-length: 20
+                min-length: 20
+            target: group-tier
+            is-private: 'true'
+        -   name: rmq_service_user
+            value: guest
+            is-private: 'false'
+            target: group-tier
+        -   name: rmq_service_password
+            value: '%random-password%'
+            is-private: 'true'
+            properties:
+                max-length: 12
+                min-length: 8
+            target: group-tier
+
+  endpoints:
+    - port: 5672
+      has-vip: true
+      vip-options:
+        - "maxconn 30000"
+        - "option redispatch"
+        - "timeout client 0"
+        - "timeout server 0"
+      vip-check: "check inter 12000 rise 3 fall 3"
+      list-members: true
+      roles:
+        - internal
+    - port: 15672
+      roles:
+        - rabbitmq_management
+    - port: 61000
+      roles:
+        - rabbitmq_inet_dist_listen
+    # RabbitMQ default Erlang Port Mapper Daemon (epmd)
+    - port: 4369
+      roles:
+        - rabbitmq_epmd
+
+  # Flags to keep compatibilty with 1.0 playbooks
+  publish-internal-as-public: true

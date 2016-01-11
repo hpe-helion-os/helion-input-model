@@ -1,0 +1,44 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+product:
+  version: 2
+
+ring-specifications:
+
+  - region-name: region1
+    rings:
+      - name: account
+        display-name: Account Ring
+        min-part-time: 16
+        partition-power: 14
+        replication-policy:
+          replica-count: 3
+
+      - name: container
+        display-name: Container Ring
+        min-part-time: 16
+        partition-power: 14
+        replication-policy:
+          replica-count: 3
+
+      - name: object-0
+        display-name: General
+        default: yes
+        min-part-time: 16
+        partition-power: 14
+        replication-policy:
+          replica-count: 3

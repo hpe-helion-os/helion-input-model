@@ -1,0 +1,90 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+product:
+    version: 2
+
+service-components:
+-   name: ceilometer-common
+    mnemonic: CEI-CMN
+
+    config-set:
+    -   name: ceilometer.conf
+        file: /etc/ceilometer/ceilometer.conf
+        affected-service: ceilometer-common
+        ansible-vars:
+        -   name: ceilometer_metering_secret
+            value: '%random-password%'
+            is-private: 'true'
+            target: group-tier
+        -   name: ceilometer_admin_user
+            value: admin
+            is-private: 'false'
+            target: group-tier
+        -   name: ceilometer_db_ttl
+            value: '604800'
+            is-private: 'false'
+            target: group-tier
+        -   name: ceilometer_sample_limit
+            value: 20
+            is-private: 'false'
+            target: group-tier
+        -   name: ceilometer_dispatcher_error_is_true
+            value: 'True'
+            is-private: 'false'
+            target: group-tier
+        -   name: ceilometer_mq_password
+            value: '%random-password%'
+            is-priavte: 'true'
+            target: group-tier
+        -   name: ceilometer_mq_user
+            value: ceilometer
+            is-private: 'false'
+            target: group-tier
+
+    consumes-services:
+    -   service-name: FND-MDB
+        relationship-vars:
+        -   name: mysql_admin_user
+            value: ceilometer
+        -   name: mysql_admin_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+
+    -   service-name: FND-RMQ
+        relationship-vars:
+        -   name: rmq_service_user
+            value: guest
+        -   name: rmq_service_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+
+    -   service-name: KEY-API
+        relationship-vars:
+        -   name: keystone_ceilometer_user
+            value: ceilometer
+        -   name: keystone_ceilometer_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'

@@ -1,0 +1,86 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+  product:
+    version: 2
+
+  server-groups:
+
+    #
+    # Server Groups provide a mechanism for organizing servers
+    # into a hierarchy that reflected the physical topology.
+    #
+    # When allocating a server the configuration processor
+    # will search down the hierarchy from the list of server
+    # groups identified as the failure-zones for the control
+    # plane until it finds an available server of the requested
+    # role.   If the allocation policy is "strict" servers are
+    # allocated from different failure-zones.
+    #
+    # When determining which network from a network group to
+    # associate with a server the configuration processor will
+    # search up the hierarchy from the server group containing the
+    # server until it finds a network in the required network
+    # group.
+    #
+
+    #
+    # In this example there is only one network in each network
+    # group and so we put all networks in the top level server
+    # group.   Below this we create server groups for three
+    # failure zones, within which servers are grouped by racks.
+    #
+    # Note: the association of servers to server groups is part
+    # of the server definition (servers.yml)
+    #
+
+    #
+    # At the top of the tree we have a server groups for
+    # networks that can reach all servers
+    #
+    - name: CLOUD
+      server-groups:
+        - AZ1
+        - AZ2
+        - AZ3
+      networks:
+        - EXTERNAL-API-NET
+        - MANAGEMENT-NET
+        - SWIFT-NET
+
+    #
+    # Failure Zones
+    #
+    - name: AZ1
+      server-groups:
+        - RACK1
+
+    - name: AZ2
+      server-groups:
+        - RACK2
+
+    - name: AZ3
+      server-groups:
+        - RACK3
+
+    #
+    # Racks
+    #
+    - name: RACK1
+
+    - name: RACK2
+
+    - name: RACK3

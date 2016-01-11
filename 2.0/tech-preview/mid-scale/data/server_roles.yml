@@ -1,0 +1,53 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+---
+  product:
+    version: 2
+
+  server-roles:
+
+    - name: CORE-ROLE
+      interface-model: CORE-INTERFACES
+      disk-model: COMMON-CONTROL-DISKS
+
+    - name: MTRMON-ROLE
+      interface-model: MTRMON-INTERFACES
+      disk-model: MTRMON-DISKS
+
+    - name: NEUTRON-ROLE
+      interface-model: NEUTRON-INTERFACES
+      disk-model: COMMON-CONTROL-DISKS
+
+    - name: DBMQ-ROLE
+      interface-model: DBMQ-INTERFACES
+      disk-model: DBMQ-DISKS
+
+    - name: SWPAC-ROLE
+      interface-model: SWPAC-INTERFACES
+      disk-model: SWPAC-DISKS
+
+    - name: COMPUTE-ROLE
+      interface-model: COMPUTE-INTERFACES
+      disk-model: COMPUTE-DISKS
+
+    - name: SWOBJ-ROLE
+      interface-model: SWOBJ-INTERFACES
+      disk-model: SWOBJ-DISKS
+
+    - name: VSA-ROLE
+      interface-model: VSA-INTERFACES
+      disk-model: VSA-DISKS

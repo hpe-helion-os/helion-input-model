@@ -1,0 +1,80 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+product:
+    version: 2
+
+service-components:
+-   name: neutron-server
+    mnemonic: NEU-SVR
+
+    advertises-to-services:
+    -   service-name: KEY-API
+
+    keystone-service-name: neutron
+    keystone-service-type: network
+
+    config-set:
+    -   name: NEU-SVR
+        ansible-vars:
+        -   name: neutron_metadata_proxy_secret
+            is-private: 'false'
+            target: group-tier
+            value: openstack
+
+    consumes-services:
+    -   service-name: FND-MDB
+        relationship-vars:
+        -   name: mysql_admin_user
+            value: neutron
+        -   name: mysql_admin_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+
+    -   service-name: FND-RMQ
+        relationship-vars:
+        -   name: rmq_service_user
+            value: guest
+        -   name: rmq_service_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+
+    -   service-name: KEY-API
+        relationship-vars:
+        -   name: keystone_neutron_user
+            value: neutron
+        -   name: keystone_neutron_password
+            value: '%random-password%'
+            properties:
+                max-length: 12
+                min-length: 8
+            is-private: 'true'
+
+    -   service-name: NOV-API
+
+    endpoints:
+    -   port: '9696'
+        has-vip: true
+        roles:
+        - public
+        - internal
+        - admin

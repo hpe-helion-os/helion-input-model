@@ -1,0 +1,32 @@
+<dl class="dl-horizontal">
+  <dt>Compute Hypervisor</dt><dd>VMWare&reg; ESX&reg;</dd>
+  <dt>Block Storage</dt><dd>provided by VMWare</dd>
+  <dt>Object Storage</dt><dd>minimal Swift on Control Plane servers</dd>
+</dl>
+<p><b>Node roles</b></p>
+<ul>
+  <li>Control Plane, includes Deployer node (3 nodes)</li>
+  <li>ESX Compute (minimum 1 node, added post-install by EON, please see <a href="http://docs.hpcloud.com/permalink/helion-openstack/2.0/install_entryscale_esx.html" target="_blank">ESX install docs</a> for more information</li>
+  <li>OVSvApp (minimum 1 node, added post-install by EON, please see <a href="http://docs.hpcloud.com/permalink/helion-openstack/2.0/install_entryscale_esx.html" target="_blank">ESX install docs</a> for more information</li>
+</ul>
+
+<p>This cloud model requires the following networks:</p>
+<p>IPMI/iLO network, connected to the deployer and the IPMI/iLO ports of all physical servers.</p>
+<p>A pair of bonded NICs which are used used by the following networks:</p>
+<ul>
+  <li>EXTERNAL-API - This is the network that users will use to make requests to the cloud</li>
+  <li>EXTERNAL-VM - This is the network that will be used to provide access to VMs (via floating IP addresses)</li>
+  <li>MANAGEMENT - This is the network that will be used for all internal traffic between the cloud services and traffic between VMs on private networks within the cloud</li>
+</ul>
+<footer>
+  <small>(c) Copyright 2015 Hewlett Packard Enterprise Development Company LP<br><br></small>
+  <small>Licensed under the Apache License, Version 2.0 (the "License"); you may </small>
+  <small>not use this file except in compliance with the License. You may obtain </small>
+  <small>a copy of the License at<br><br></small>
+  <small>http://www.apache.org/licenses/LICENSE-2.0<br><br></small>
+  <small>Unless required by applicable law or agreed to in writing, software </small>
+  <small>distributed under the License is distributed on an "AS IS" BASIS, WITHOUT </small>
+  <small>WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the </small>
+  <small>License for the specific language governing permissions and limitations </small>
+  <small>under the License.<br></small>
+</footer>

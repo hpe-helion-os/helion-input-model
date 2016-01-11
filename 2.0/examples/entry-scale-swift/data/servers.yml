@@ -1,0 +1,91 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+  product:
+    version: 2
+  baremetal:
+    subnet: 10.241.17.0
+    netmask: 255.255.255.0
+
+  servers:
+    # NOTE: Addresses of servers need to be
+    #       changed to match your environment.
+    #
+    #       Add additional servers as required
+    #
+
+    # Controllers and Swift PAC (Proxy, Account and Container) Nodes
+
+    - id: swpac1
+      role: CONTROLLER-ROLE
+      server-group: RACK1
+      mac-addr: "5c:b9:01:89:c2:ac"
+      ip-addr: 10.241.17.11
+      ilo-ip: 10.1.13.138
+      ilo-user: admin
+      ilo-password: password
+      nic-mapping: HP-DL360-4PORT
+
+    - id: swpac2
+      role: CONTROLLER-ROLE
+      server-group: RACK2
+      mac-addr: "5c:b9:01:89:c6:f4"
+      ip-addr: 10.241.17.12
+      ilo-ip: 10.1.13.136
+      ilo-user: admin
+      ilo-password: password
+      nic-mapping: HP-DL360-4PORT
+
+    - id: swpac3
+      role: CONTROLLER-ROLE
+      server-group: RACK3
+      mac-addr: "5c:b9:01:89:c5:5c"
+      ip-addr: 10.241.17.13
+      ilo-ip: 10.1.9.143
+      ilo-user: admin
+      ilo-password: password
+      nic-mapping: HP-DL360-4PORT
+
+    # Swift Object Storage Nodes
+    - id: swobj1
+      role: SWOBJ-ROLE
+      server-group: RACK1
+      mac-addr: "5c:b9:01:89:c6:e0"
+      ip-addr: 10.241.17.14
+      ilo-ip: 10.1.9.149
+      ilo-user: admin
+      ilo-password: password
+      nic-mapping: HP-DL360-4PORT
+
+    - id: swobj2
+      role: SWOBJ-ROLE
+      server-group: RACK2
+      mac-addr: "8c:dc:d4:b5:cc:1c"
+      ip-addr: 10.241.17.15
+      ilo-ip: 10.1.9.139
+      ilo-user: admin
+      ilo-password: password
+      nic-mapping: HP-DL360-4PORT
+
+    - id: swobj3
+      role: SWOBJ-ROLE
+      server-group: RACK3
+      mac-addr: "8c:dc:d4:b5:7a:30"
+      ip-addr: 10.241.17.16
+      ilo-ip: 10.1.8.95
+      ilo-user: admin
+      ilo-password: password
+      nic-mapping: HP-DL360-4PORT

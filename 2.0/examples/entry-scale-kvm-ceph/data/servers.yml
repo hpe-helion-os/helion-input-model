@@ -1,0 +1,106 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+  product:
+    version: 2
+
+  baremetal:
+    # NOTE: These values need to be changed to match your environment.
+    # Define the network range that contains the ip-addr values for
+    # the individual servers listed below.
+    subnet: 192.168.10.0
+    netmask: 255.255.255.0
+
+  servers:
+    # NOTE: Addresses of servers need to be changed to match your environment.
+    #
+    #       Add additional servers as required
+    #
+
+    # Controllers
+    - id: controller1
+      ip-addr: 192.168.10.3
+      role: CONTROLLER-ROLE
+      server-group: RACK1
+      nic-mapping: HP-DL360-4PORT
+      mac-addr: "b2:72:8d:ac:7c:6f"
+      ilo-ip: 192.168.9.3
+      ilo-password: password
+      ilo-user: admin
+
+    - id: controller2
+      ip-addr: 192.168.10.4
+      role: CONTROLLER-ROLE
+      server-group: RACK2
+      nic-mapping: HP-DL360-4PORT
+      mac-addr: "8a:8e:64:55:43:76"
+      ilo-ip: 192.168.9.4
+      ilo-password: password
+      ilo-user: admin
+
+    - id: controller3
+      ip-addr: 192.168.10.5
+      role: CONTROLLER-ROLE
+      server-group: RACK3
+      nic-mapping: HP-DL360-4PORT
+      mac-addr: "26:67:3e:49:5a:a7"
+      ilo-ip: 192.168.9.5
+      ilo-password: password
+      ilo-user: admin
+
+
+    # Compute Nodes
+    - id: compute1
+      ip-addr: 192.168.10.6
+      role: COMPUTE-ROLE
+      server-group: RACK1
+      nic-mapping: MY-2PORT-SERVER
+      mac-addr: "d6:70:c1:36:43:f7"
+      ilo-ip: 192.168.9.6
+      ilo-password: password
+      ilo-user: admin
+
+
+    # Ceph OSD Nodes
+    - id: osd1
+      ip-addr: 192.168.10.9
+      role: OSD-ROLE
+      server-group: RACK1
+      nic-mapping: MY-2PORT-SERVER
+      mac-addr: "8b:f6:9e:ca:3b:78"
+      ilo-ip: 192.168.9.9
+      ilo-password: password
+      ilo-user: admin
+
+    - id: osd2
+      ip-addr: 192.168.10.10
+      role: OSD-ROLE
+      server-group: RACK2
+      nic-mapping: MY-2PORT-SERVER
+      mac-addr: "8b:f6:9e:ca:3b:79"
+      ilo-ip: 192.168.9.10
+      ilo-password: password
+      ilo-user: admin
+
+    - id: osd3
+      ip-addr: 192.168.10.11
+      role: OSD-ROLE
+      server-group: RACK3
+      nic-mapping: MY-2PORT-SERVER
+      mac-addr: "8b:f6:9e:ca:3b:7a"
+      ilo-ip: 192.168.9.11
+      ilo-password: password
+      ilo-user: admin

@@ -1,0 +1,74 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+
+---
+  product:
+    version: 2
+
+  server-groups:
+
+    #
+    # Inter AZ networks
+    #
+    - name: CLOUD
+      server-groups:
+        - AZ1
+        - AZ2
+        - AZ3
+      networks:
+        - EXTERNAL-API-NET
+        - EXTERNAL-VM-NET
+        - INTERNAL-API-NET
+        - ISCSI-NET
+        - CONF-NET
+
+    #
+    # Failure Zones
+    #
+    - name: AZ1
+      server-groups:
+        - rack1
+
+    - name: AZ2
+      server-groups:
+        - rack2
+
+    - name: AZ3
+      server-groups:
+        - rack3
+
+
+    #
+    # Racks
+    #
+    - name: rack1
+      networks:
+        - GUEST-NET-RACK1
+        - MANAGEMENT-NET-RACK1
+        - SWIFT-NET-RACK1
+
+    - name: rack2
+      networks:
+        - GUEST-NET-RACK2
+        - MANAGEMENT-NET-RACK2
+        - SWIFT-NET-RACK2
+
+    - name: rack3
+      networks:
+        - GUEST-NET-RACK3
+        - MANAGEMENT-NET-RACK3
+        - SWIFT-NET-RACK3
+

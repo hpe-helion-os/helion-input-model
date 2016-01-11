@@ -1,0 +1,130 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+  product:
+    version: 2
+
+  control-planes:
+    - name: control-plane-1
+      control-plane-prefix: cp1
+      region-name: region1
+      failure-zones:
+        - AZ1
+        - AZ2
+        - AZ3
+      common-service-components:
+        - logging-producer
+        - monasca-agent
+        - freezer-agent
+        - stunnel
+        - lifecycle-manager-target
+      clusters:
+        - name: cluster1
+          cluster-prefix: c1
+          server-role: CONTROLLER-ROLE
+          member-count: 3
+          allocation-policy: strict
+          service-components:
+            - lifecycle-manager
+            - ntp-server
+            - swift-ring-builder
+            - mysql
+            - ip-cluster
+            - apache2
+            - keystone-api
+            - keystone-client
+            - rabbitmq
+            - glance-api
+            - glance-registry
+            - glance-client
+            - cinder-api
+            - cinder-scheduler
+            - cinder-volume
+            - cinder-backup
+            - cinder-client
+            - nova-api
+            - nova-scheduler
+            - nova-conductor
+            - nova-console-auth
+            - nova-novncproxy
+            - nova-client
+            - neutron-server
+            - neutron-ml2-plugin
+            - neutron-vpn-agent
+            - neutron-dhcp-agent
+            - neutron-metadata-agent
+            - neutron-openvswitch-agent
+            - neutron-client
+            - horizon
+            - sherpa-api
+            - swift-proxy
+            - memcached
+            - swift-account
+            - swift-container
+            - swift-object
+            - swift-client
+            - heat-api
+            - heat-api-cfn
+            - heat-api-cloudwatch
+            - heat-engine
+            - heat-client
+            - openstack-client
+            - ceilometer-api
+            - ceilometer-collector
+            - ceilometer-agent-central
+            - ceilometer-agent-notification
+            - ceilometer-expirer
+            - ceilometer-common
+            - ceilometer-client
+            - zookeeper
+            - kafka
+            - vertica
+            - storm
+            - monasca-api
+            - monasca-persister
+            - monasca-notifier
+            - monasca-threshold
+            - monasca-client
+            - logging-server
+            - ops-console-web
+            - ops-console-monitor
+            - cmc-service
+            - freezer-api
+            - ceph-monitor
+
+      resources:
+        - name: compute
+          resource-prefix: comp
+          server-role: COMPUTE-ROLE
+          allocation-policy: any
+          min-count: 0
+          service-components:
+            - ntp-client
+            - nova-compute
+            - nova-compute-kvm
+            - neutron-l3-agent
+            - neutron-metadata-agent
+            - neutron-openvswitch-agent
+            - neutron-lbaasv2-agent
+
+        - name: osd
+          resource-prefix: ceph
+          server-role: OSD-ROLE
+          allocation-policy: strict
+          min-count: 3
+          service-components:
+            - ntp-client
+            - ceph-osd

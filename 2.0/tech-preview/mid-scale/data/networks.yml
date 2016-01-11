@@ -1,0 +1,148 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+  product:
+    version: 2
+
+  networks:
+    #
+    # This example uses the following networks
+    #
+    # Network       CIDR                     VLAN
+    # -------       ----                     ----
+    # External API  10.243.125.0/24          3365      (tagged)
+    # Internal API  10.243.126.0/24          3366      (tagged)
+    # External VM   see note 1               3367      (tagged)
+    # ISCSI         10.243.0.0/24            3374      (tagged)
+    # Conf          10.243.140.0/24          3380      (untagged)
+    # Guest         10.243.[127-129].0/24    3368-70   (tagged)
+    # Management    10.243.[130-132].0/24    3371-73   (untagged)
+    # Swift         10.243.[136-138].0/24    3377-79   (tagged)
+    #
+    # Notes:
+    # 1. Defined as part of Neutron configuration
+    # 2. Guest, Swift  and Management networks defined per rack
+    #
+    # Modify these values to match your environment
+    #
+    - name: EXTERNAL-API-NET
+      vlanid: 3365
+      tagged-vlan: true
+      cidr: 10.243.125.0/24
+      gateway-ip: 10.243.125.1
+      network-group: EXTERNAL-API
+
+    - name: INTERNAL-API-NET
+      vlanid: 3366
+      tagged-vlan: true
+      cidr: 10.243.126.0/24
+      gateway-ip: 10.243.126.1
+      network-group: INTERNAL-API
+
+    - name: EXTERNAL-VM-NET
+      vlanid: 3367
+      tagged-vlan: true
+      network-group: EXTERNAL-VM
+
+    - name: ISCSI-NET
+      vlanid: 3374
+      tagged-vlan: true
+      cidr: 10.243.133.0/24
+      gateway-ip: 10.243.133.1
+      network-group: ISCSI
+
+    - name: CONF-NET
+      vlanid: 3380
+      tagged-vlan: false
+      cidr: 10.243.140.0/24
+      gateway-ip: 10.243.140.1
+      network-group: CONF
+
+
+   #
+   # Per Rack Guest Networks
+   #
+    - name: GUEST-NET-RACK1
+      vlanid: 3368
+      tagged-vlan: true
+      cidr: 10.243.127.0/24
+      gateway-ip: 10.243.127.1
+      network-group: GUEST
+
+    - name: GUEST-NET-RACK2
+      vlanid: 3369
+      tagged-vlan: true
+      cidr: 10.243.128.0/24
+      gateway-ip: 10.243.128.1
+      network-group: GUEST
+
+    - name: GUEST-NET-RACK3
+      vlanid: 3370
+      tagged-vlan: true
+      cidr: 10.243.129.0/24
+      gateway-ip: 10.243.129.1
+      network-group: GUEST
+
+
+    #
+    # Per Rack SWIFT
+    #
+
+    - name: SWIFT-NET-RACK1
+      vlanid: 3377
+      tagged-vlan: true
+      cidr: 10.243.136.0/24
+      gateway-ip: 10.243.136.1
+      network-group: SWIFT
+
+    - name: SWIFT-NET-RACK2
+      vlanid: 3378
+      tagged-vlan: true
+      cidr: 10.243.137.0/24
+      gateway-ip: 10.243.137.1
+      network-group: SWIFT
+
+    - name: SWIFT-NET-RACK3
+      vlanid: 3379
+      tagged-vlan: true
+      cidr: 10.243.138.0/24
+      gateway-ip: 10.243.138.1
+      network-group: SWIFT
+
+    #
+    # Per Rack Management Networks
+    #
+    - name: MANAGEMENT-NET-RACK1
+      vlanid: 3371
+      tagged-vlan: false
+      cidr: 10.243.130.0/24
+      gateway-ip: 10.243.130.1
+      network-group: MANAGEMENT
+
+    - name: MANAGEMENT-NET-RACK2
+      vlanid: 3372
+      tagged-vlan: false
+      cidr: 10.243.131.0/24
+      gateway-ip: 10.243.131.1
+      network-group: MANAGEMENT
+
+    - name: MANAGEMENT-NET-RACK3
+      vlanid: 3373
+      tagged-vlan: false
+      cidr: 10.243.132.0/24
+      gateway-ip: 10.243.132.1
+      network-group: MANAGEMENT
+

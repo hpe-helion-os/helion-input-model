@@ -1,0 +1,87 @@
+#
+# (c) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+---
+  product:
+    version: 2
+
+  control-planes:
+    - name: control-plane-1
+      control-plane-prefix: cp1
+      region-name: region1
+      failure-zones:
+        - AZ1
+        - AZ2
+        - AZ3
+      common-service-components:
+        - freezer-agent
+        - logging-producer
+        - monasca-agent
+        - stunnel
+        - lifecycle-manager-target
+
+      clusters:
+        - name: swpac
+          cluster-prefix: c1
+          server-role: CONTROLLER-ROLE
+          member-count: 3
+          allocation-policy: strict
+          service-components:
+            - lifecycle-manager
+            - ntp-server
+            - mysql
+            - ip-cluster
+            - apache2
+            - keystone-api
+            - keystone-client
+            - rabbitmq
+            - horizon
+            - sherpa-api
+            - memcached
+            - ceilometer-api
+            - ceilometer-collector
+            - ceilometer-agent-central
+            - ceilometer-agent-notification
+            - ceilometer-expirer
+            - ceilometer-common
+            - ceilometer-client
+            - zookeeper
+            - kafka
+            - vertica
+            - storm
+            - monasca-api
+            - monasca-persister
+            - monasca-notifier
+            - monasca-threshold
+            - monasca-client
+            - logging-server
+            - ops-console-web
+            - ops-console-monitor
+            - freezer-api
+            - swift-ring-builder
+            - swift-proxy
+            - swift-account
+            - swift-container
+            - swift-client
+
+      resources:
+        - name: swobj
+          resource-prefix: swobj
+          server-role: SWOBJ-ROLE
+          allocation-policy: strict
+          min-count: 3
+          service-components:
+            - ntp-client
+            - swift-object

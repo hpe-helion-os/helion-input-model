@@ -1,0 +1,36 @@
+<dl class="dl-horizontal">
+  <dt>Compute Hypervisor</dt><dd>KVM</dd>
+  <dt>Block Storage</dt><dd>VSA (optional)</dd>
+  <dt>Object Storage</dt><dd>minimal Swift on Control Plane servers</dd>
+</dl>
+<p><b>Node roles</b></p>
+<ul>
+  <li>Control Plane, includes Deployer node (3 nodes)</li>
+  <li>VSA (0 or 3, nodes)</li>
+  <li>Compute (minimum 1 node)</li>
+</ul>
+
+<p>This example separates network traffic into four logical networks which are carried on a pair of bonded physical ports.</p>
+
+<p><b>Logical network separation:</b></p>
+<ol>
+<li>External API - used by consumers of the cloud to make requests to the cloud APIs</li>
+<li>External VM - used to provide external access to VMs (via floating IP addresses)</li>
+<li>Guest - carries traffic between VMs on private networks within the cloud (VxLAN encapsulated)</li>
+<li>Management - used for all internal traffic between the cloud services. This network is also used to provision and configure the cloud servers.</li>
+</ol>
+<p>
+In addition, each server is connected to a dedicated IPMI/iLO network. This is used for power management during installation.
+</p>
+<footer>
+  <small>(c) Copyright 2015 Hewlett Packard Enterprise Development Company LP<br><br></small>
+  <small>Licensed under the Apache License, Version 2.0 (the "License"); you may </small>
+  <small>not use this file except in compliance with the License. You may obtain </small>
+  <small>a copy of the License at<br><br></small>
+  <small>http://www.apache.org/licenses/LICENSE-2.0<br><br></small>
+  <small>Unless required by applicable law or agreed to in writing, software </small>
+  <small>distributed under the License is distributed on an "AS IS" BASIS, WITHOUT </small>
+  <small>WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the </small>
+  <small>License for the specific language governing permissions and limitations </small>
+  <small>under the License.<br></small>
+</footer>
